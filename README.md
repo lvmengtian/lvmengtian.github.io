@@ -9,6 +9,8 @@
 1. 安装依赖
    
    ```shell
+    # 查看缺少的依赖
+    $ npm ls --depth 0
     $ npm install hexo-deployer-git --save
     $ npm install hexo --save
     # 执行👆命令之后，没有hexo s命令，需要安装依赖
