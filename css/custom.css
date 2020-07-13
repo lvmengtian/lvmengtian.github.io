@@ -1,0 +1,12 @@
+/*编程题页面的编程题列表样式*/
+#myTabContent .list-group .list-group-item {
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6{
+  margin: 0;
+  padding: 0;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
