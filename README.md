@@ -6,15 +6,14 @@
 
 #### 安装教程
 
-1. 安装依赖
-   
+1. 安装Hexo
    ```shell
-    # 查看缺少的依赖
-    $ npm ls --depth 0
-    $ npm install hexo-deployer-git --save
-    $ npm install hexo --save
-    # 执行👆命令之后，没有hexo s命令，需要安装依赖
-    $ npm install hexo-server --save 
+   $ npm install hexo-cli -g
+   ```
+2. 安装依赖
+   已经把依赖放在了init.sh里面
+   ```shell
+   $ sh init.sh
    ```
 
 
