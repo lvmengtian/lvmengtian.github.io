@@ -17,10 +17,19 @@
   <meta name="description" content="">
   <meta name="author" content="吕小毛">
   <meta name="keywords" content="">
-  <title>分类 - 吕小毛杂货铺</title>
+  <title>Leetcode 96. 不同的二叉搜索树 - 吕小毛杂货铺</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -46,7 +55,7 @@
 
 
 <body>
-  <header style="height: 60vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -156,6 +165,48 @@
             </span>
 
             
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-07-15 13:15">
+      2020年7月15日 下午
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      共计 440 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      阅读 
+      1
+       分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-post-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-post-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
           </div>
 
           
@@ -166,105 +217,110 @@
 
   <main>
     
-      <div class="container nopadding-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <blockquote>
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/unique-binary-search-trees" target="_blank" rel="noopener">https://leetcode-cn.com/problems/unique-binary-search-trees</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
+</blockquote>
+<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>给定一个整数 n，求以 1 … n 为节点组成的二叉搜索树有多少种？</p>
+<pre><code class="hljs angelscript">示例:
+
+输入: <span class="hljs-number">3</span>
+输出: <span class="hljs-number">5</span>
+解释:
+给定 n = <span class="hljs-number">3</span>, 一共有 <span class="hljs-number">5</span> 种不同结构的二叉搜索树:
+
+   <span class="hljs-number">1</span>         <span class="hljs-number">3</span>     <span class="hljs-number">3</span>      <span class="hljs-number">2</span>      <span class="hljs-number">1</span>
+    \       /     /      / \      \
+     <span class="hljs-number">3</span>     <span class="hljs-number">2</span>     <span class="hljs-number">1</span>      <span class="hljs-number">1</span>   <span class="hljs-number">3</span>      <span class="hljs-number">2</span>
+    /     /       \                 \
+   <span class="hljs-number">2</span>     <span class="hljs-number">1</span>         <span class="hljs-number">2</span>                 <span class="hljs-number">3</span></code></pre>
+
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>我们定义 $dp(n)$ 为 $n$ 个节点时不同结构二叉搜索树的数量。 首先分情况考虑一下：</p>
+<ol>
+<li>0个节点时，有1种结构的树（$dp[0] = 1$）</li>
+<li>1个节点时，有1种结构的树（<code>1</code> 作为根节点，左子树节点数量为0，右子树节点数量为0，即 $dp[1] = dp[0] * dp[0]。左子树的数量 乘以 右子树的数量$）</li>
+<li>2个节点时，有2种结构的树（<code>1</code>作为根节点，左子树节点数量为0，右子树节点数量为1；<code>2</code>作为根节点，左子树节点数量为1，右子树节点数量为0。即 $dp[2] = dp[0] * dp[1] + dp[1] * dp[0]$）</li>
+<li>所以可以推理出当有n个节点时的公式为：$dp[n] = dp[0]<em>dp[n-1] + dp[1]</em>dp[n-2] + … + dp[n-1]*dp[0]$</li>
+</ol>
+<p>由此可见我们应该借助动态规范来完成此题。转换方程既是上面的公式。</p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">numTrees</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span> </span>&#123;
+    <span class="hljs-keyword">int</span>[] dp = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[n + <span class="hljs-number">1</span>];
+    dp[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>; <span class="hljs-comment">// 0个节点时的数量</span>
+    dp[<span class="hljs-number">1</span>] = <span class="hljs-number">1</span>; <span class="hljs-comment">// 1个节点时的数量</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-comment">// 使用公式计算dp[i]的值</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; i; j++) &#123;
+            dp[i] += dp[j] * dp[i - j - <span class="hljs-number">1</span>];
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> dp[n];
+&#125;</code></pre>
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%BC%96%E7%A8%8B%E9%A2%98/">编程题</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/leetcode/">leetcode</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
                 
 
-
-
-
-
-
-
-<div class="category-list">
-  
-  
-  
-  
-    
-    
-    <div class="category row">
-      <a
-        class="category-item collapsed list-group-item category-item-action col-10 col-md-11"
-        id="heading-ckcmxm5x4000bo89ea1ykgfls" role="tab" data-toggle="collapse" href="#collapse-ckcmxm5x4000bo89ea1ykgfls"
-        aria-expanded="false"
-      >
-        面试
-        <i class="iconfont icon-arrowright"></i>
-      </a>
-      <a href="/categories/%E9%9D%A2%E8%AF%95/" class="category-count col-2 col-md-1">
-        <i class="iconfont icon-articles"></i>
-        <span>1</span>
-      </a>
-      <div class="category-collapse">
-        
-          
-  <div id="collapse-ckcmxm5x4000bo89ea1ykgfls" class="collapse in" role="tabpanel"
-       aria-labelledby="heading-ckcmxm5x4000bo89ea1ykgfls">
-    
-    
-    
-      
-      
-        <a href="/2020/07/06/interview/%E5%90%84%E5%A4%A7%E5%85%AC%E5%8F%B8%E9%9D%A2%E8%AF%95%E9%A2%98%E5%88%86%E7%B1%BB%E6%95%B4%E7%90%86/" class="list-group-item list-group-item-action">
-          <span class="category-post">各大公司面试题分类整理</span>
-        </a>
-      
-    
-  </div>
-
-        
-      </div>
-    </div>
-  
-    
-    
-    <div class="category row">
-      <a
-        class="category-item collapsed list-group-item category-item-action col-10 col-md-11"
-        id="heading-ckcmxm5x5000ho89ed531gvaq" role="tab" data-toggle="collapse" href="#collapse-ckcmxm5x5000ho89ed531gvaq"
-        aria-expanded="false"
-      >
-        linux
-        <i class="iconfont icon-arrowright"></i>
-      </a>
-      <a href="/categories/linux/" class="category-count col-2 col-md-1">
-        <i class="iconfont icon-articles"></i>
-        <span>1</span>
-      </a>
-      <div class="category-collapse">
-        
-          
-  <div id="collapse-ckcmxm5x5000ho89ed531gvaq" class="collapse in" role="tabpanel"
-       aria-labelledby="heading-ckcmxm5x5000ho89ed531gvaq">
-    
-    
-    
-      
-      
-        <a href="/2020/07/13/summary/%E8%81%8A%E8%81%8A%E8%80%81%E6%9D%BF%E8%AE%A9%E6%88%91%E5%88%A0%E9%99%A4%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/" class="list-group-item list-group-item-action">
-          <span class="category-post">聊聊老板让我删除日志文件那些事儿</span>
-        </a>
-      
-    
-  </div>
-
-        
-      </div>
-    </div>
-  
-</div>
-
               </div>
-            </div>
+            
           </div>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
   </main>
 
@@ -482,10 +538,10 @@
       }
 
       // 如果是文章，请求文章的浏览数，并自增
-      if ('false' === 'true') {
+      if ('true' === 'true') {
         var viewCtn = document.querySelector('#leancloud-post-views-container');
         if (viewCtn || enableIncr) {
-          var target = decodeURI('/categories/index.html');
+          var target = decodeURI('/2020/07/15/leetcode/96/');
           var viewGetter = getRecord(Counter, target).then((record) => {
             incrArr.push(buildIncrement(record.objectId))
             if (viewCtn) {
@@ -547,6 +603,31 @@
 
 
 
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
 
 
   <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
@@ -554,7 +635,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "分类&nbsp;",
+        "Leetcode 96. 不同的二叉搜索树&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
@@ -583,9 +664,62 @@
 
 
 
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
 
 
 
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.staticfile.org/mathjax/3.0.5/es5/tex-svg.js" ></script>
+
+  
 
 
 
