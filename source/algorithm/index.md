@@ -27,7 +27,10 @@ subtitle: 每天一道算法题
       <div class="tab-pane fade show active" id="easy" role="tabpanel" aria-labelledby="home-tab">
           <ul class="list-group list-group-flush">
               <li class="list-group-item">
-                <a href="/2020/07/02/leetcode/1/">Leetcode 1: 两数之和</a>
+                <a href="/2020/07/02/leetcode/1/">Leetcode 1. 两数之和</a>
+              </li>
+              <li class="list-group-item">
+                <a href="/2020/07/15/leetcode/96/">Leetcode 96. 不同的二叉搜索树</a>
               </li>
           </ul>
       </div>
