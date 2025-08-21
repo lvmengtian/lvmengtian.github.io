@@ -7,7 +7,7 @@ config:
     full: true
     background: tint-plate
     hero:
-      name: 浮梦札记1
+      name: 浮梦札记123
       tagline: 
       text: 半梦半醒半真实，亦书亦我亦人间
       actions:
