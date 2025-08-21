@@ -20,6 +20,15 @@ jobs:
       - name: 设置 pnpm
         uses: pnpm/action-setup@v4
 
+      - name: Copy docs directory
+        run: |
+          # 删除可能存在的构建目录
+          rm -rf ./_site
+          # 创建构建目录
+          mkdir -p ./_site
+          # 复制docs目录内容到构建目录
+          cp -r ./docs/* ./_site/
+
       - name: 设置 Node.js
         uses: actions/setup-node@v4
         with:
