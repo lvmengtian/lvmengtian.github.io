@@ -4,7 +4,7 @@ createTime: 2025/08/20 21:55:46
 permalink: /java-guide/hg5e8awy/
 ---
 
-### 面向对象的基本特性？
+## 面向对象的基本特性？
 面向对象基本特性是：**封装**、**集成**、**多态**
 1. **封装**：将数据（属性）和操作数据的方法（行为）封装在一起，形成一个独立的“对象”。同时，对外部隐藏对象的内部实现细节，只暴露有限的、安全的接口进行交互。
 2. **继承**：允许一个类（子类、派生类）继承另一个现有类（父类、基类、超类）的属性和方法。子类可以复用父类的功能，并可以扩展出自己特有的属性和方法。
@@ -59,14 +59,14 @@ permalink: /java-guide/hg5e8awy/
   ```
 :::
 
-### 什么是强引用、软引用、弱引用、虚引用？
+## 什么是强引用、软引用、弱引用、虚引用？
 我们来详细讲解一下Java中的四种引用类型：强引用（Strong Reference）、软引用（Soft Reference）、弱引用（Weak Reference）和虚引用（Phantom Reference）。
 
 这四种引用类型的强度依次递减，它们与Java的垃圾回收（Garbage Collection, GC）行为密切相关，主要用于管理对象的内存生命周期，是实现内存敏感缓存、防止内存泄漏的强大工具。
 
 ---
 
-#### 1. 强引用 (Strong Reference)
+### 1. 强引用 (Strong Reference)
 
 **定义**：
 强引用是程序中最普遍、默认的引用类型。我们平常使用`new`关键字创建的对象，赋值给一个变量，这个变量就是该对象的**强引用**。
@@ -83,7 +83,7 @@ Object obj = new Object(); // obj 就是新Object对象的强引用
 
 ---
 
-#### 2. 软引用 (Soft Reference)
+### 2. 软引用 (Soft Reference)
 
 **定义**：
 软引用用来描述一些**还有用但并非必需**的对象。
@@ -115,7 +115,7 @@ if (obj != null) {
 
 ---
 
-#### 3. 弱引用 (Weak Reference)
+### 3. 弱引用 (Weak Reference)
 
 **定义**：
 弱引用用来描述**非必需**的对象，但其强度比软引用更弱。
@@ -145,7 +145,7 @@ if (weakRef.get() != null) {
 
 ---
 
-#### 4. 虚引用 (Phantom Reference)
+### 4. 虚引用 (Phantom Reference)
 
 **定义**：
 虚引用也称为“幽灵引用”或“幻影引用”，是**最弱**的一种引用关系。一个对象是否有虚引用存在，完全不会对其生存时间构成影响。
@@ -181,7 +181,7 @@ if (ref != null) {
 
 ---
 
-#### 总结对比
+### 总结对比
 
 | 引用类型 | 强度 | 被垃圾回收的时机 | `get()` 方法 | 用途 |
 | :--- | :--- | :--- | :--- | :--- |
@@ -192,7 +192,7 @@ if (ref != null) {
 
 **核心思想**：通过使用不同强度的引用，开发者可以与垃圾收集器进行“沟通”，更精细地控制对象的生命周期，从而在实现特定功能（如缓存）的同时，有效避免内存泄漏的风险。
 
-### Integer、Long里面的cache有什么区别？
+## Integer、Long里面的cache有什么区别？
 通过直接查看IntegerCache和LongCache的源码就可发现区别。
 ::: code-tabs
 
@@ -262,16 +262,16 @@ if (ref != null) {
 :::
 **通过源码可以看出Long的缓存就是固定的[-128, 127]的范围；Integer的缓存默认是[-128, 127]，但是上限可以通过参数进行配置。**
 
-### 接口和抽象类的区别？
+## 接口和抽象类的区别？
 
-#### 核心概念
+### 核心概念
 
 *   **抽象类**：是对一类事物的**抽象**，即对**类的抽象**。它表示的是“**is-a**”（是一个）的关系。例如，`Animal`是一个抽象类，`Dog` *是一个* `Animal`。
 *   **接口**：是对行为的**抽象**，即对**行为的抽象**。它表示的是“**can-do**”（能做什么）的关系。例如，`Flyable`是一个接口，`Bird` *能* `Fly`（实现`Flyable`接口）。
 
 ---
 
-#### 详细区别对比
+### 详细区别对比
 
 | 特性 | 抽象类 (Abstract Class) | 接口 (Interface) (Java 8以前) | 接口 (Java 8及以后) |
 | :--- | :--- | :--- | :--- |
@@ -285,7 +285,7 @@ if (ref != null) {
 
 ---
 
-#### 代码示例
+### 代码示例
 
 ::: code-tabs
 @tab 抽象类示例
@@ -371,7 +371,7 @@ class Duck extends Animal implements Flyable, Swimmable {
 ```
 :::
 
-#### 如何选择？
+### 如何选择？
 
 根据你的设计目的来决定使用接口还是抽象类：
 
@@ -386,9 +386,9 @@ class Duck extends Animal implements Flyable, Swimmable {
     *   你只想定义**行为**，而不关心具体的实现（在Java 8之前），或者想为这些行为提供默认实现（Java 8之后）。
 
 
-### String、StringBuilder、StringBuffer的区别？
+## String、StringBuilder、StringBuffer的区别？
 
-#### 核心区别总结
+### 核心区别总结
 
 | 特性 | `String` | `StringBuilder` | `StringBuffer` |
 | :--- | :--- | :--- | :--- |
@@ -399,9 +399,9 @@ class Duck extends Animal implements Flyable, Swimmable {
 
 ---
 
-#### 详细解析
+### 详细解析
 
-##### 1. String（不可变字符串）
+#### 1. String（不可变字符串）
 
 *   **核心特点：不可变性**
     一旦一个 `String` 对象被创建，它的值就无法被改变。任何看似修改它的操作（如 `concat()`, `+`, `substring()`），实际上都是**创建了一个全新的 `String` 对象**，而原来的对象依然存在于内存中。
@@ -418,7 +418,7 @@ class Duck extends Animal implements Flyable, Swimmable {
 *   **线程安全：**
     因为不可变，所以天然线程安全。多个线程可以同时读取一个字符串，而不会产生任何问题。
 
-##### 2. StringBuilder（可变字符串，非线程安全）
+#### 2. StringBuilder（可变字符串，非线程安全）
 
 *   **核心特点：可变性 & 高性能**
     `StringBuilder` 内部维护了一个可变的字符数组（`char[] value`）。当进行追加、插入、删除等操作时，**直接在原数组上进行修改**，只有在容量不足时才会进行扩容（创建一个新的更大数组）。这避免了大量临时对象的创建。
@@ -429,7 +429,7 @@ class Duck extends Animal implements Flyable, Swimmable {
 *   **线程安全：**
     **非线程安全**。它的方法没有使用同步(`synchronized`)锁，因此效率更高，但不能在多线程环境下共享使用，否则可能导致数据不一致。
 
-##### 3. StringBuffer（可变字符串，线程安全）
+#### 3. StringBuffer（可变字符串，线程安全）
 
 *   **核心特点：可变性 & 线程安全**
     `StringBuffer` 可以看作是 `StringBuilder` 的线程安全版本。它们的功能API几乎完全一样。
@@ -442,7 +442,7 @@ class Duck extends Animal implements Flyable, Swimmable {
 
 ---
 
-#### 性能差异深度分析
+### 性能差异深度分析
 
 性能排序（在字符串修改操作中）： **`StringBuilder` > `StringBuffer` > `String`**
 
@@ -495,7 +495,7 @@ public class PerformanceTest {
 
 ---
 
-#### 使用场景推荐
+### 使用场景推荐
 
 1.  **使用 `String`：**
     *   **不需要改变**的字符串常量或字符串字面量（例如，定义消息、配置键等）。
@@ -512,23 +512,23 @@ public class PerformanceTest {
     *   例如：多个线程同时操作同一个字符串缓冲区。
     *   **注意**：在现代Java开发中，即使是在多线程环境下，也往往可以通过线程隔离（如每个线程使用自己的 `StringBuilder`）或其他同步机制来避免直接使用 `StringBuffer`，因为它的性能开销通常是不必要的。
 
-#### 最佳实践
+### 最佳实践
 
 *   **简单的字符串拼接**：如果拼接操作很少，可以直接用 `+`，编译器可能会自动优化成 `StringBuilder`。
 *   **复杂的字符串构建**：**毫不犹豫地使用 `StringBuilder`**。
 *   **初始大小**：如果可以预估最终字符串的大致长度，在创建 `StringBuilder` 或 `StringBuffer` 时指定初始容量（如 `new StringBuilder(1024)`），可以减少扩容次数，进一步提升性能。
 *   **原则**：**除非有明确的、必须的多线程共享修改需求，否则永远优先使用 `StringBuilder`。**
 
-### Java异常分类？可检查异常和不可检查异常有什么区别？
-#### 一、Java异常的分类体系
+## Java异常分类？可检查异常和不可检查异常有什么区别？
+### 一、Java异常的分类体系
 
 Java中所有的异常和错误都有一个共同的根父类：Throwable。它有两个直接子类：Error 和 Exception。而 Exception 又分为两大类：可检查异常（Checked Exception） 和 不可检查异常（Unchecked Exception），其中不可检查异常主要指 RuntimeException 及其子类
 
 ![123](/images/throwable-class.png)
 ---
-#### 二、各类异常详解
+### 二、各类异常详解
 
-##### 1. Error (错误)
+#### 1. Error (错误)
 *   **定义**：`Error` 及其子类表示的是应用程序**无法处理**的严重问题，通常与代码编写者无关，而是JVM运行时系统本身的问题（如系统资源耗尽）。
 *   **特点**：
     *   是 **不可检查异常（Unchecked）**，编译器不会要求你捕获或声明它们。
@@ -539,7 +539,7 @@ Java中所有的异常和错误都有一个共同的根父类：Throwable。它�
     *   `StackOverflowError`：栈溢出（如无限递归）。
     *   `VirtualMachineError`：虚拟机错误。
 
-##### 2. Exception (异常)
+#### 2. Exception (异常)
 `Exception` 及其子类表示的是程序本身**可以处理**的问题。这是我们关注的重点，它分为两类：
 
 **A. 可检查异常 (Checked Exception)**
@@ -566,7 +566,7 @@ Java中所有的异常和错误都有一个共同的根父类：Throwable。它�
 
 ---
 
-#### 三、可检查异常 vs 不可检查异常：核心区别
+### 三、可检查异常 vs 不可检查异常：核心区别
 
 | 特性 | 可检查异常 (Checked Exception) | 不可检查异常 (Unchecked Exception) |
 | :--- | :--- | :--- |
@@ -578,9 +578,9 @@ Java中所有的异常和错误都有一个共同的根父类：Throwable。它�
 
 ---
 
-#### 四、如何处理异常？（代码示例）
+### 四、如何处理异常？（代码示例）
 
-##### 1. 处理可检查异常（两种方式）
+#### 1. 处理可检查异常（两种方式）
 
 **方式一：使用 `try-catch` 块捕获并处理**
 ```java
@@ -602,7 +602,7 @@ public void readFile() throws FileNotFoundException { // 在方法签名中声�
 // 此时，调用readFile()的方法就必须处理这个异常了。
 ```
 
-##### 2. 处理不可检查异常（通常不强制处理，但可以捕获）
+#### 2. 处理不可检查异常（通常不强制处理，但可以捕获）
 
 ```java
 // 这段代码能通过编译，但运行时会抛出ArithmeticException
@@ -628,7 +628,7 @@ public void calculateBetter(int divisor) {
 }
 ```
 
-#### 五、如何选择？最佳实践
+### 五、如何选择？最佳实践
 
 1.  **对于可检查异常**：如果你知道如何从错误中**恢复**（如提示用户重新输入文件名），就用 `try-catch`。如果不知道如何处理，只是想向上汇报，就用 `throws`。
 
@@ -655,7 +655,7 @@ public void calculateBetter(int divisor) {
     }
     ```
 
-### 重写和重载的区别，构造函数可以重写吗
+## 重写和重载的区别，构造函数可以重写吗
 ```java
 class Person {
     String name;
@@ -680,7 +680,7 @@ class Student extends Person {
 
 构造函数不能被重写，因为重写要求方法名一致。而构造函数的方法名就是类名。子类不可能和父类同名，所以也不可能有相同的构造函数。所以构造函数不能重写，但是可以重载。
 
-### 介绍一些常用的Java工具命令
+## 介绍一些常用的Java工具命令
 |命令|说明|
 |---|---|
 | jps | 虚拟机进程状态工具，可以列出虚拟机进程 |
