@@ -33,6 +33,10 @@ jobs:
           # 缓存 pnpm 依赖
           cache: pnpm
 
+      - name: Install Vue-router
+        run: |
+          pnpm add vue-router@4
+
       - name: Install dependencies
         run: |
           pnpm install --frozen-lockfile
