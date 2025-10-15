@@ -30,7 +30,6 @@ Java包含8种基本类型，分别是：
 > 
 > 因为Java是有符号的，所以最高位是用来表示符号的，（0-表示正数 1-表示负数）。所以真正表示数值的就只有7个二进制位。所以取值范围的二进制表示理应是`11111111 ~ 01111111`，即`-128 ~ 128`。但是，数值在计算机中是以补码的方式存储的。什么是补码？ 了解了什么是补码后，会发现01111111是无法表达出来的，所以需要减去1，即变成`01111110`。也就是byte的取值范围是`-128 ~ 127`
 
-
 ## 面向对象的基本特性？
 面向对象基本特性是：**封装**、**集成**、**多态**
 1. **封装**：将数据（属性）和操作数据的方法（行为）封装在一起，形成一个独立的“对象”。同时，对外部隐藏对象的内部实现细节，只暴露有限的、安全的接口进行交互。
@@ -720,3 +719,24 @@ Java自带的命令都在JDK的bin目录下。
 | jhat |  java虚拟机堆转储快照分析工具 |
 | jconsole | 用于提供JVM活动的图形化视图,包括线程的使用、类的使用和GC活动. 
 | jvisualvm | 监控JVM的GUI工具,可用来剖析运行的应用,分析JVM堆转储 |
+
+## JDK、JRE、JVM的区别
+> 参考
+> 1. [JDK vs JRE vs JVM in Java – Difference Between Them](https://www.guru99.com/difference-between-jdk-jre-jvm.html)
+
+JDK、JRE、JVM是Java编程语言的核心内容，虽然日常开发中我们不关注这些概念，但是作为一名合格的Java程序员，还是应该了解下它们之间的区别。
+- JDK（Java Development Kit，Java开发工具包）包含了JRE以及开发小程序和应用程序所需的编译器和调试器等工具。
+- JRE（Java Runtime Environment）包含类库、加载器类和 JVM。如果你想运行Java程序，你需要JRE。 如果你无需开发Java代码，则不需要安装JDK，只需要安装JRE即可运行Java程序。 不过，所有 JDK 版本都捆绑了 Java 运行时环境，因此您无需在 PC 中单独下载并安装 JRE。（即安装JDK的时候也附带了JRE）。
+- JVM（Java Virtual Machine）是一个提供运行时环境来驱动Java代码或应用程序的引擎。 它将 Java 字节码转换为机器语言。 JVM 是 Java 运行时环境 (JRE) 的一部分。 在其他编程语言中，编译器为特定系统生成机器代码，所以跨平台特性不是很好。然而，Java 编译器是将 Java 代码编译成 JVM 认识的机器代码，这也是为什么Java支持跨平台。因为更换了平台只要有 JVM，JVM 就认识编译后的机器码。
+
+**具体不同对比如下：**
+| JDK | JRE | JVM |
+|-------|-------|--------|
+| Java Development Kit | Java Runtime Environment | Java Virtual Machine |
+| JDK是一个软件开发工具包，用于开发Java应用程序 | JRE是一个软件包，提供 Java 类库以及运行 Java 代码所需的组件 | JVM执行Java字节码并提供执行环境。是Java支持跨平台的关键 |
+| 包含用于开发、调试和监控 java 代码的工具 | 包含 JVM 执行程序所需的类库和其他支持文件 | |
+| JDK包含JRE | JRE包含JVM | |
+| JDK 使开发人员能够创建可由 JRE 和 JVM 执行和运行的 Java 程序 | JRE 是 Java 中创建 JVM 的部分 | JVM是执行源代码的Java平台组件 |
+
+在下图中可以看出JDK、JRE、JVM三者的包含关系以及具体组成部分：
+![](/images/jdk.png)
