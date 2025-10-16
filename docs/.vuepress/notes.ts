@@ -66,5 +66,5 @@ const AINote = defineNoteConfig({
 export default defineNotesConfig({
   dir: 'notes',
   link: '/',
-  notes: [javaGuideNote, otherNote, AINote],
+  notes: [javaGuideNote, otherNote],
 })
