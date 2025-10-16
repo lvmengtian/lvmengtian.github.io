@@ -12,7 +12,8 @@ export default defineNavbarConfig([
   { text: '标签', link: '/blog/tags/' },
   { text: '归档', link: '/blog/archives/' },
   {text: '面试指北', link: '/notes/java-guide/'},
-  {text: '笔记', link: '/notes/others/'}
+  {text: '笔记', link: '/notes/others/'},
+  {text: 'AI', link: '/notes/ai/'}
   /*{
     text: '笔记',
     items: [
