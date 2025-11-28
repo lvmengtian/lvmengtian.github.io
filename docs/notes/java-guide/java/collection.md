@@ -1,5 +1,5 @@
 ---
-title: java集合
+title: Java集合
 createTime: 2025/08/20 21:55:46
 permalink: /java-guide/h9mgtev9/
 ---
