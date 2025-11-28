@@ -125,3 +125,107 @@ UPDATE `account ` SET `balance` = `balance` + 500, `version` = `version` + 1 WHE
 ## 分库分表的组件，如何生成分布式ID？
 
 ## 什么是MVCC， 可以解决什么问题
+
+## MySQL索引失效的场景
+> 平时是不是遇到过明明加了索引，查询还是慢得像蜗牛？很可能是你的索引‘失灵’了！今天我们就来盘点那些导致索引失效的经典场景，附上实战示例，让你彻底搞懂
+
+在深入细节之前，我们可以通过一张图来建立一个整体的认知。下图概括了最常见的索引失效场景及其核心原因：
+![](/images/sql_index_invalid.png)
+
+接下来，我们来逐一剖析这些场景的具体表现。
+
+**1. 违背最左前缀原则 (The Leftmost Prefix Rule)**
+
+这是联合索引最常见的坑。
+- **示例：** 我们有一个联合索引 `INDEX idx_name_age (name, age)`。
+    ```sql
+    -- 【有效✅】使用了索引的最左列`name`
+    EXPLAIN SELECT * FROM users WHERE name = '小毛';
+
+    -- 【有效✅】使用了索引的最左列`name`，并且包含`age`
+    EXPLAIN SELECT * FROM users WHERE name = '小毛' AND age = 25;
+
+    -- 【失效❌】没有从最左列`name`开始，跳过了它
+    EXPLAIN SELECT * FROM users WHERE age = 25;
+
+    -- 【部分有效】使用了最左列`name`，但因为是范围查询，`age`列无法用索引进一步筛选
+    EXPLAIN SELECT * FROM users WHERE name = '小毛' AND age > 20;
+    ```
+
+**2. 在索引列上使用函数或计算**
+
+一旦对索引列进行操作，MySQL就无法直接使用该索引的排序结构了。
+
+- **示例：** 在`create_time`、 `age` 列上有索引。
+    ```sql
+    -- 【失效❌】对索引列使用了函数
+    EXPLAIN SELECT * FROM users WHERE YEAR(create_time) = 2023;
+
+    -- 【有效✅】改为范围查询，避免对列操作
+    EXPLAIN SELECT * FROM users WHERE create_time BETWEEN '2023-01-01' AND '2023-12-31';
+
+    -- 【失效❌】对索引列进行了计算
+    EXPLAIN SELECT * FROM users WHERE age + 1 = 30;
+
+    -- 【有效✅】将计算移到等号另一边
+    EXPLAIN SELECT * FROM users WHERE age = 29;
+    ```
+
+**3. 隐式类型转换 (Implicit Type Conversion)**
+
+如果字符串类型的索引列，你传入了一个数字，MySQL会进行隐式转换，相当于在列上使用了函数。
+
+- **示例：** `user_id` 是 `VARCHAR` 类型，并且有索引。
+    ```sql
+    -- 【失效❌】数据库需要将每个user_id转换成数字，才能与123比较，相当于使用了CAST函数
+    EXPLAIN SELECT * FROM users WHERE user_id = 123;
+
+    -- 【有效✅】传入字符串，类型匹配
+    EXPLAIN SELECT * FROM users WHERE user_id = '123';
+    ```
+
+**4. 使用不等于 (!= 或 <>)**
+
+不等于条件无法直接利用索引的有序性来快速定位数据，通常会导致全表扫描。
+
+- **示例：** 在 `age` 列上有索引。
+    ```sql
+    -- 【失效❌】不等于查询，需要检查所有行
+    EXPLAIN SELECT * FROM users WHERE age != 25;
+    EXPLAIN SELECT * FROM users WHERE age <> 25;
+    ```
+
+**5. 使用 `LIKE` 以通配符开头**
+
+索引是按照字段值的前缀排序的。以 `%` 开头，意味着没有确定的前缀，索引无法定位。
+
+- **示例：** 在 `name` 列上有索引。
+    ```sql
+    -- 【失效❌】以通配符开头，索引不知道从哪找起
+    EXPLAIN SELECT * FROM users WHERE name LIKE '%毛';
+
+    -- 【有效✅】确定的前缀，索引可以快速定位
+    EXPLAIN SELECT * FROM users WHERE name LIKE '小%';
+    ```
+
+**6. 使用 `OR` 连接非索引列**
+
+如果 `OR` 前后的条件并非都基于索引，MySQL通常会选择全表扫描。
+
+- **示例：** 只在 `name` 列上有索引，`age` 列没有。
+    ```sql
+    -- 【失效❌】`age`列无索引，导致整个查询无法有效使用索引
+    EXPLAIN SELECT * FROM users WHERE name = '小毛' OR age = 25;
+
+    -- 【解决方案】可以考虑将`age`也加上索引，或使用UNION改写。
+    ```
+
+**7. 数据库评估使用全表扫描更快时**
+
+如果表非常小，或者查询需要返回表中很大比例的数据（例如超过30%），MySQL优化器可能认为直接读取整个表（全表扫描）比“索引查找+回表”的代价更小，从而放弃使用索引。
+
+- **示例：** 在 `status` 列（只有0，1两种状态）上有索引。
+    ```sql
+    -- 【可能失效】当status=1的数据占全表40%时，优化器可能选择全表扫描
+    EXPLAIN SELECT * FROM orders WHERE status = 1;
+    ```
