@@ -83,3 +83,107 @@ permalink: /java-guide/millg80j/
 > 3. 锁优化层面：为了平衡性能，JVM设计了偏向锁、轻量级锁、重量级锁的升级过程，根据竞争激烈程度动态切换。”
 > 
 > “它的保证的可见性和有序性，是通过在解锁时必须将工作内存的变量刷回主内存，以及‘一个变量在同一时刻只允许一条线程对其进行lock操作’这条规则来实现的。”
+
+## synchronized VS ReentrantLock 如何抉择
+> “在JDK1.6之前，ReentrantLock在性能上对synchronized是碾压性的优势。但1.6之后，synchronized被重写了底层，加入了偏向锁、轻量级锁等优化，**两者在性能上已相差无几**。所以现在的抉择就不再是‘谁更快’，而是 **‘谁更能解决我的实际问题’** 。
+
+### 核心差异对比
+
+| 特性维度 | 🗝️ synchronized (JVM内置锁) | 🔌 ReentrantLock (API层面的锁) |
+| :--- | :--- | :--- |
+| **获取与释放** | **自动管理**。JVM负责在代码块入口和出口加锁、释放锁，不会遗忘。 | **手动管理**。必须显式调用 `lock()` 和 `unlock()`，易遗忘，需在 `finally` 中释放。 |
+| **可中断性** | **不可中断**。线程若争抢不到锁，会一直阻塞，无法响应中断。 | **可中断**。提供了 `lockInterruptibly()` 方法，在等待锁时可以响应线程中断。 |
+| **公平性** | **仅支持非公平锁**。 | **支持两者**。构造函数可传入 `true` 来创建公平锁，防止线程饥饿。 |
+| **超时机制** | **不支持**。 | **支持**。`tryLock(long timeout, TimeUnit unit)` 可尝试获取锁，超时则放弃。 |
+| **绑定条件** | **单一等待队列**。`wait()`/`notify()`/`notifyAll()` 随机唤醒。 | **多个Condition**。一个锁可以绑定多个条件队列，实现精确唤醒。 |
+| **锁粒度** | 方法或代码块。 | 更灵活，锁的获取和释放可以跨越方法。 |
+| **性能趋势** | JDK1.6后优化很好，在**低至中度竞争**下性能极佳。 | 在高竞争环境下，仍能保持稳定，提供了更丰富的**避免竞争**的手段。 |
+
+### 核心优势场景深度解析
+
+#### 1. 何时优先选择synchronized？
+
+-   **场景一：追求开发效率与可靠性**
+    -   **理由**：语法简洁，自动释放，无需担心因异常导致锁无法释放的问题。这是它**最核心的优势**。
+    -   **代码对比**：
+        ```java
+        // synchronized: 简洁，可靠
+        public synchronized void add() {
+            // ... 业务逻辑
+        }
+
+        // ReentrantLock: 繁琐，需手动处理
+        private ReentrantLock lock = new ReentrantLock();
+        public void add() {
+            lock.lock(); // 如果这里发生异常，锁还沒获取到
+            try {
+                // ... 业务逻辑
+            } finally {
+                lock.unlock(); // 必须放在finally块，确保锁释放
+            }
+        }
+        ```
+
+-   **场景二：绝大多数并发场景**
+    -   **理由**：在大部分业务系统中，锁的竞争并不激烈。synchronized经过优化后，在这种情况下性能非常好，且JVM会自动进行锁升级/降级，无需开发者关心。
+
+#### 2. 何时应考虑 ReentrantLock？
+
+-   **场景一：需要应对“死等”风险 —— 可中断与超时**
+    -   **案例**：一个转账服务，需要同时获取A锁和B锁。如果线程T1持有A等B，T2持有B等A，形成死锁。
+    -   **synchronized方案**：无解，只能重启。
+    -   **ReentrantLock方案**：使用 `tryLock` 进行尝试。
+        ```java
+        if (lockA.tryLock(1, TimeUnit.SECONDS)) { // 尝试获取锁A，等1秒
+            try {
+                if (lockB.tryLock(1, TimeUnit.SECONDS)) { // 尝试获取锁B，等1秒
+                    try {
+                        // ... 执行转账业务
+                    } finally {
+                        lockB.unlock();
+                    }
+                }
+            } finally {
+                lockA.unlock();
+            }
+        } else {
+            // 记录日志，执行补偿逻辑，不会死锁
+        }
+        ```
+
+-   **场景二：实现“先来后到” —— 公平锁**
+    -   **案例**：一个票务系统，希望先请求的用户先买到票，避免某些用户一直抢不到（线程饥饿）。
+    -   **解决方案**：使用 `new ReentrantLock(true)`。
+
+-   **场景三：实现“分组唤醒” —— 条件变量 (Condition)**
+    -   **经典案例：生产者-消费者模型**。我们希望生产者只唤醒消费者，消费者只唤醒生产者，而不是把所有等待线程都唤醒。
+    -   **synchronized方案**：使用 `Object.wait()` 和 `Object.notifyAll()`，但 `notifyAll()` 会唤醒所有等待的生产者和消费者，效率低。
+    -   **ReentrantLock方案**：使用两个Condition。
+        ```java
+        private ReentrantLock lock = new ReentrantLock();
+        private Condition notFull = lock.newCondition();  // 队列未满条件
+        private Condition notEmpty = lock.newCondition(); // 队列非空条件
+
+        // 生产者
+        public void put(Object item) throws InterruptedException {
+            lock.lock();
+            try {
+                while (queue.isFull()) {
+                    notFull.await(); // 在“未满”条件上等待
+                }
+                // ... 生产数据
+                notEmpty.signal(); // 精准唤醒一个在“非空”条件上等待的消费者
+            } finally {
+                lock.unlock();
+            }
+        }
+        // 消费者同理，使用notEmpty.await()和notFull.signal()
+        ```
+
+### 面试回答模板
+**我的选择原则是：**
+> “**优先使用synchronized**。因为在JDK1.6优化后，它的性能已经不差，而且语法简单、由JVM自动管理，能有效减少编码错误。只有在需要synchronized无法提供的**高级功能**时，我才会考虑使用ReentrantLock，比如：
+> 1.  **需要尝试获取锁**，用于解决死锁或苛刻的超时控制。
+> 2.  **需要公平锁**，来处理线程饥饿问题。
+> 3.  **需要可中断的锁**，让线程在等待时能响应外部中断。
+> 4.  **需要绑定多个条件变量**，来实现线程间的精确通知，比如经典的生产者-消费者模型。”
