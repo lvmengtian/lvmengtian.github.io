@@ -13,10 +13,10 @@ config:
       actions:
         -
           theme: brand
-          text: 参观一下 →
-          link: /blog/
+          text: 面试指北 →
+          link: /java-guide/
         -
           theme: alt
-          text: 主题 →
-          link: https://github.com/pengzhanbo/vuepress-theme-plume
+          text: 随笔 →
+          link: /notes/
 ---
