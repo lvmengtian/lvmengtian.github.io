@@ -95,8 +95,23 @@ flowchart TD
 **3. 一个必须避开的坑：**
 不要使用 `Executors.newFixedThreadPool()` 或 `newCachedThreadPool()` 等工厂方法，因为它们内部使用了**无界队列**或**最大线程数为Integer.MAX_VALUE**，在任务生产速度过快时，极易导致 **OOM**。**务必手动 `new ThreadPoolExecutor` 并根据业务设置明确的边界。**
 
-## 介绍什么是ThreadLocal，以及为什么会有内存泄露风险
+## 什么是阻塞队列？说说常用的阻塞队列有哪些？
+> 阻塞队列 BlockingQueue 继承 Queue ，是我们熟悉的基本数据结构队列的一种特殊类型。
+> 
+> 当从阻塞队列中获取数据时，如果队列为空，则等待直到队列有元素存入。当向阻塞队列中存入元素时，如果队列已满，则等待直到队列中有元素被移除。提供 offer()、put()、take()、poll() 等常用方法。
 
+**JDK 提供的阻塞队列的实现有以下几种：**
+1. **ArrayBlockingQueue：** 由数组实现的有界阻塞队列，该队列按照 FIFO 对元素进行排序。维护两个整形变量，标识队列头尾在数组中的位置，在生产者放入和消费者获取数据共用一个锁对象，意味着两者无法真正的并行运行，性能较低。
+2. **LinkedBlockingQueue：** 由链表组成的有界阻塞队列，如果不指定大小，默认使用 Integer.MAX_VALUE 作为队列大小，该队列按照 FIFO 对元素进行排序，对生产者和消费者分别维护了独立的锁来控制数据同步，意味着该队列有着更高的并发性能。
+3. **SynchronousQueue：** 不存储元素的阻塞队列，无容量，可以设置公平或非公平模式，插入操作必须等待获取操作移除元素，反之亦然。
+4. **PriorityBlockingQueue：** 支持优先级排序的无界阻塞队列，默认情况下根据自然序排序，也可以指定 Comparator
+5. **DelayQueue：** 支持延时获取元素的无界阻塞队列，创建元素时可以指定多久之后才能从队列中获取元素，常用于缓存系统或定时任务调度系统。
+6. **LinkedTransferQueue：** 一个由链表结构组成的无界阻塞队列，与 LinkedBlockingQueue 相比多了 transfer 和 tryTranfer 方法，该方法在有消费者等待接收元素时会立即将元素传递给消费者。
+7. **LinkedBlockingDeque：** 一个由链表结构组成的双端阻塞队列，可以从队列的两端插入和删除元素
+
+
+
+## 介绍什么是ThreadLocal，以及为什么会有内存泄露风险
 ### ThreadLocal介绍
 为了解决“在多线程下访问共享变量时，存在的并发问题”，我们可以使用同步机制（如: `synchronized`）, 同时也可以使用`ThreadLocal`。`ThreadLocal` 提供了一个“每个线程都有自己的专属变量”的机制，避免了多线程环境下共享变量的并发问题。通过`ThreadLocal`的`set`方法可以看出来。`ThreadLocal`通过`Map`结构来存储数据，Key就是当前线程，Value就是存储的数据。
 ```java
