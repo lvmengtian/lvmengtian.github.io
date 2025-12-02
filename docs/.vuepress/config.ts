@@ -109,6 +109,7 @@ export default defineUserConfig({
       */
     markdown: {
         collapse: true, // 启用折叠代码块
+        mermaid: true      // 启用 mermaid
     //   abbr: true,         // 启用 abbr 语法  *[label]: content
     //   annotation: true,   // 启用 annotation 语法  [+label]: content
     //   pdf: true,          // 启用 PDF 嵌入 @[pdf](/xxx.pdf)
@@ -137,7 +138,7 @@ export default defineUserConfig({
     //   },
     //   chartjs: true,      // 启用 chart.js
     //   echarts: true,      // 启用 ECharts
-    //   mermaid: true,      // 启用 mermaid
+    
     //   flowchart: true,    // 启用 flowchart
     //   image: {
     //     figure: true,     // 启用 figure
