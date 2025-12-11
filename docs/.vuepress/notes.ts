@@ -19,6 +19,7 @@
  *
  * 通过 `defineNoteConfig` 定义的 note 配置，应该填入 `defineNotesConfig` 的 notes 数组中
  */
+import { text } from 'stream/consumers'
 import { defineNoteConfig, defineNotesConfig } from 'vuepress-theme-plume'
 
 const javaGuideNote = defineNoteConfig({
@@ -30,7 +31,40 @@ const javaGuideNote = defineNoteConfig({
   // 手动配置侧边栏结构
   // sidebar: [],
   // 根据文件结构自动生成侧边栏
-  sidebar: 'auto',
+  sidebar: [
+    {
+      text: 'Java',
+      items: [
+        {text: 'Java 基础', link: '/java-guide/hg5e8awy/'},
+        {text: 'Java 集合', link: '/java-guide/h9mgtev9/'},
+        {text: 'Java 并发编程', link: '/java-guide/5qe4rxai/'},
+        {text: 'Java 虚拟机', link: '/java-guide/ypjcijom/'},
+      ],
+      collapsed: false,
+    },
+    {
+      text: '数据库',
+      items: [
+        {text: 'MySQL', link: '/java-guide/396o7sc3/'},
+      ],
+      collapsed: false,
+    },
+    {
+      text: 'Spring',
+      items: [
+        {text: 'Spring', link: '/java-guide/ysb3pgbj/'},
+      ],
+      collapsed: false,
+    },
+    
+    {
+      text: '其他',
+      items: [
+        {text: '软技能', link: '/java-guide/nkmdr64r/'},
+      ],
+      collapsed: false,
+    }
+  ],
 })
 
 const otherNote = defineNoteConfig({
