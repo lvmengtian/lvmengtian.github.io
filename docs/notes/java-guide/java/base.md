@@ -4,13 +4,13 @@ createTime: 2025/08/20 21:55:46
 permalink: /java-guide/hg5e8awy/
 ---
 ## java的基本类型以及取值范围
-### 基本类型
+### 🧱 基本类型
 Java包含8种基本类型，分别是：
 - 整数类型：byte、short、int、long
 - 浮点数类型：float、double
 - 字符类型：char
 - 布尔类型：boolean
-### 取值范围
+### 🔍 取值范围
 想了解这些类型的取值范围，就要先知道不同类型所占用的字节数。在此之前我们先了解一下字节的概念。
 在计算机存储中，最小的存储单位是字节（Byte）。一个字节包含8位二进制数，每个二进制数就是1bit；
 即`1Byte = 8bit`。一个字节取值范围使用二进制表示就是 `00000000~11111111`，换成十进制就是`0 ~ 255`。
@@ -207,7 +207,7 @@ if (ref != null) {
 
 ---
 
-### 总结对比
+### 📌 总结对比
 
 | 引用类型 | 强度 | 被垃圾回收的时机 | `get()` 方法 | 用途 |
 | :--- | :--- | :--- | :--- | :--- |
@@ -290,14 +290,14 @@ if (ref != null) {
 
 ## 接口和抽象类的区别？
 
-### 核心概念
+### 🔍 核心概念
 
 *   **抽象类**：是对一类事物的**抽象**，即对**类的抽象**。它表示的是“**is-a**”（是一个）的关系。例如，`Animal`是一个抽象类，`Dog` *是一个* `Animal`。
 *   **接口**：是对行为的**抽象**，即对**行为的抽象**。它表示的是“**can-do**”（能做什么）的关系。例如，`Flyable`是一个接口，`Bird` *能* `Fly`（实现`Flyable`接口）。
 
 ---
 
-### 详细区别对比
+### 🆚 详细区别对比
 
 | 特性 | 抽象类 (Abstract Class) | 接口 (Interface) (Java 8以前) | 接口 (Java 8及以后) |
 | :--- | :--- | :--- | :--- |
@@ -311,7 +311,7 @@ if (ref != null) {
 
 ---
 
-### 代码示例
+### 🌰 代码示例
 
 ::: code-tabs
 @tab 抽象类示例
@@ -397,7 +397,7 @@ class Duck extends Animal implements Flyable, Swimmable {
 ```
 :::
 
-### 如何选择？
+### ☑️ 如何选择？
 
 根据你的设计目的来决定使用接口还是抽象类：
 
@@ -414,7 +414,7 @@ class Duck extends Animal implements Flyable, Swimmable {
 
 ## String、StringBuilder、StringBuffer的区别？
 
-### 核心区别总结
+### 📌 核心区别总结
 
 | 特性 | `String` | `StringBuilder` | `StringBuffer` |
 | :--- | :--- | :--- | :--- |
@@ -425,7 +425,7 @@ class Duck extends Animal implements Flyable, Swimmable {
 
 ---
 
-### 详细解析
+### 🔍 详细解析
 
 #### 1. String（不可变字符串）
 
@@ -468,7 +468,7 @@ class Duck extends Animal implements Flyable, Swimmable {
 
 ---
 
-### 性能差异深度分析
+### 📚 性能差异深度分析
 
 性能排序（在字符串修改操作中）： **`StringBuilder` > `StringBuffer` > `String`**
 
@@ -521,7 +521,7 @@ public class PerformanceTest {
 
 ---
 
-### 使用场景推荐
+### 💻 使用场景推荐
 
 1.  **使用 `String`：**
     *   **不需要改变**的字符串常量或字符串字面量（例如，定义消息、配置键等）。
@@ -538,7 +538,7 @@ public class PerformanceTest {
     *   例如：多个线程同时操作同一个字符串缓冲区。
     *   **注意**：在现代Java开发中，即使是在多线程环境下，也往往可以通过线程隔离（如每个线程使用自己的 `StringBuilder`）或其他同步机制来避免直接使用 `StringBuffer`，因为它的性能开销通常是不必要的。
 
-### 最佳实践
+### 🌰 最佳实践
 
 *   **简单的字符串拼接**：如果拼接操作很少，可以直接用 `+`，编译器可能会自动优化成 `StringBuilder`。
 *   **复杂的字符串构建**：**毫不犹豫地使用 `StringBuilder`**。
@@ -546,13 +546,13 @@ public class PerformanceTest {
 *   **原则**：**除非有明确的、必须的多线程共享修改需求，否则永远优先使用 `StringBuilder`。**
 
 ## Java异常分类？可检查异常和不可检查异常有什么区别？
-### 一、Java异常的分类体系
+### 🧱 Java异常的分类体系
 
 Java中所有的异常和错误都有一个共同的根父类：Throwable。它有两个直接子类：Error 和 Exception。而 Exception 又分为两大类：可检查异常（Checked Exception） 和 不可检查异常（Unchecked Exception），其中不可检查异常主要指 RuntimeException 及其子类
 
 ![123](/images/throwable-class.png)
 ---
-### 二、各类异常详解
+### 🔍 各类异常详解
 
 #### 1. Error (错误)
 *   **定义**：`Error` 及其子类表示的是应用程序**无法处理**的严重问题，通常与代码编写者无关，而是JVM运行时系统本身的问题（如系统资源耗尽）。
@@ -592,7 +592,7 @@ Java中所有的异常和错误都有一个共同的根父类：Throwable。它�
 
 ---
 
-### 三、可检查异常 vs 不可检查异常：核心区别
+### 🆚 可检查异常 vs 不可检查异常：核心区别
 
 | 特性 | 可检查异常 (Checked Exception) | 不可检查异常 (Unchecked Exception) |
 | :--- | :--- | :--- |
@@ -604,7 +604,7 @@ Java中所有的异常和错误都有一个共同的根父类：Throwable。它�
 
 ---
 
-### 四、如何处理异常？（代码示例）
+### 🌰 如何处理异常？（代码示例）
 
 #### 1. 处理可检查异常（两种方式）
 
@@ -654,7 +654,7 @@ public void calculateBetter(int divisor) {
 }
 ```
 
-### 五、如何选择？最佳实践
+### ☑️ 如何选择？最佳实践
 
 1.  **对于可检查异常**：如果你知道如何从错误中**恢复**（如提示用户重新输入文件名），就用 `try-catch`。如果不知道如何处理，只是想向上汇报，就用 `throws`。
 
@@ -705,6 +705,72 @@ class Student extends Person {
 **重载：** 函数名相同，参数个数不同或者参数类型不同。注意方法返回值不同是不算重载的。上面代码中对构造函数就是通过参数个数不同进行重载。
 
 构造函数不能被重写，因为重写要求方法名一致。而构造函数的方法名就是类名。子类不可能和父类同名，所以也不可能有相同的构造函数。所以构造函数不能重写，但是可以重载。
+
+## Java 中的 `==` 和 `equals()` 有什么不同？
+
+> 在 Java 中，`==` 用于比较 **基本数据类型的数值** 或 **对象的引用地址**，而 `equals()` 方法用于比较 **对象的内容**（前提是该类重写了 `equals()` 方法，如 `String`、`Integer` 等）。
+
+---
+
+### 🔍 详细解析
+
+#### 1. `==` 操作符
+- **基本数据类型**：比较的是数值是否相等。  
+  ```java
+  int a = 5;
+  int b = 5;
+  System.out.println(a == b); // true
+  ```
+- **引用数据类型**：比较的是两个对象的 **内存地址** 是否相同，即是否指向同一个对象。  
+  ```java
+  String s1 = new String("hello");
+  String s2 = new String("hello");
+  System.out.println(s1 == s2); // false，因为是两个不同对象
+  ```
+
+#### 2. `equals()` 方法
+- 定义在 `Object` 类中，默认实现也是比较引用地址。  
+- 许多类（如 `String`、`Integer`）**重写了 `equals()` 方法**，用于比较对象的内容。  
+  ```java
+  String s1 = new String("hello");
+  String s2 = new String("hello");
+  System.out.println(s1.equals(s2)); // true，因为 String 重写了 equals()，比较的是内容
+  ```
+
+#### 3. 示例对比
+```java
+String s1 = "HELLO";
+String s2 = "HELLO";
+String s3 = new String("HELLO");
+
+System.out.println(s1 == s2);      // true，同一个字符串常量池对象
+System.out.println(s1 == s3);      // false，不同对象
+System.out.println(s1.equals(s2)); // true，内容相同
+System.out.println(s1.equals(s3)); // true，内容相同
+```
+
+---
+
+### 📌 总结
+- **`==`**：比较的是 **地址或数值**。  
+- **`equals()`**：比较的是 **对象内容**（如果类重写了该方法）。  
+- 面试常考点：`String` 的比较要用 `equals()`，而不是 `==`，除非你明确要比较引用是否相同。  
+
+### 🪤 常见的陷阱题
+::: tip  `Integer` 对象用 `==` 比较时为什么有时相等，有时不相等？
+Java 对 Integer 在 [-128,127] 范围内有缓存，所以相同数值会指向同一个对象。超出范围时会创建新对象，`==` 比较为 false。
+:::
+
+::: tip  `new String("abc") == "abc"` 的结果是什么？为什么？
+- `"abc"` 来自字符串常量池。
+- `new String("abc")` 会在堆上创建新对象。
+- 所以 `==` 比较为 false，但 `equals()` 为 true。
+:::
+
+::: tip 为什么 `HashSet` 中两个内容相同的对象可能会重复？
+如果类没有正确重写 `equals()` 和 `hashCode()`，集合无法识别对象内容相同。必须同时重写 `equals()` 和 `hashCode()` 保证一致性。
+:::
+
 
 ## 介绍一些常用的Java工具命令
 Java自带的命令都在JDK的bin目录下。
