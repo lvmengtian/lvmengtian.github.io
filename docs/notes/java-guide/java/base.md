@@ -708,7 +708,9 @@ class Student extends Person {
 
 ## Java 中的 `==` 和 `equals()` 有什么不同？
 
-> 在 Java 中，`==` 用于比较 **基本数据类型的数值** 或 **对象的引用地址**，而 `equals()` 方法用于比较 **对象的内容**（前提是该类重写了 `equals()` 方法，如 `String`、`Integer` 等）。
+::: tip 简要回答
+在 Java 中，`==` 用于比较 **基本数据类型的数值** 或 **对象的引用地址**，而 `equals()` 方法用于比较 **对象的内容**（前提是该类重写了 `equals()` 方法，如 `String`、`Integer` 等）。
+:::
 
 ---
 
@@ -757,17 +759,17 @@ System.out.println(s1.equals(s3)); // true，内容相同
 - 面试常考点：`String` 的比较要用 `equals()`，而不是 `==`，除非你明确要比较引用是否相同。  
 
 ### 🪤 常见的陷阱题
-::: tip  `Integer` 对象用 `==` 比较时为什么有时相等，有时不相等？
+::: warning  `Integer` 对象用 `==` 比较时为什么有时相等，有时不相等？
 Java 对 Integer 在 [-128,127] 范围内有缓存，所以相同数值会指向同一个对象。超出范围时会创建新对象，`==` 比较为 false。
 :::
 
-::: tip  `new String("abc") == "abc"` 的结果是什么？为什么？
+::: warning  `new String("abc") == "abc"` 的结果是什么？为什么？
 - `"abc"` 来自字符串常量池。
 - `new String("abc")` 会在堆上创建新对象。
 - 所以 `==` 比较为 false，但 `equals()` 为 true。
 :::
 
-::: tip 为什么 `HashSet` 中两个内容相同的对象可能会重复？
+::: warning 为什么 `HashSet` 中两个内容相同的对象可能会重复？
 如果类没有正确重写 `equals()` 和 `hashCode()`，集合无法识别对象内容相同。必须同时重写 `equals()` 和 `hashCode()` 保证一致性。
 :::
 
